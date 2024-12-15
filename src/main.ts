@@ -1,5 +1,7 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
+import FormData from 'form-data'
+import fs from 'fs';
+import axios from 'axios';
 
 /**
  * The main function for the action.
@@ -7,20 +9,33 @@ import { wait } from './wait'
  */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    core.debug("step <- run.prepare");
+    const API_TOKEN: string = core.getInput('cf-token');
+    const PROJECT_ID: string = core.getInput('cf-projecid');
+    const FILE_PATH: string = core.getInput('file-path');
+    const CTX: string = core.getInput("cf-context");
+    const METADATA: string = core.getInput("cf-metadata");
+    const AGENT: string = core.getInput("axios-agent");
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    core.debug("step <- run.validate");
+    if (!fs.existsSync(FILE_PATH)) {
+      core.setFailed(`not found file ${FILE_PATH}`);
+    }
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    core.debug("step <- run");
+    const formData = new FormData();
+    formData.append('metadata', JSON.stringify(METADATA));
+    formData.append('file', fs.createReadStream(FILE_PATH));
+    const result = await axios.post(`https://${CTX}.curseforge.com/api/projects/${PROJECT_ID}/upload-file`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        'User-Agent': AGENT,
+        'X-Api-Token': API_TOKEN,
+        ...formData.getHeaders()
+      }
+    });
+    core.setOutput('file', result)
   } catch (error) {
-    // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
   }
 }

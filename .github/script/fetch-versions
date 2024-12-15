@@ -1,0 +1,20 @@
+#!/bin/bash
+$OUTPUT_PATH_CURSEFORGE="../pages/cursefoge.versions.json"
+$OUTPUT_PATH_MODRINTH="../pages/modrinth.versions.json"
+
+if [ -z "$CF" ]; then
+  echo "Erreur : La variable d'environnement 'CF' n'est pas définie."
+  exit 1
+fi
+
+curl -X GET "https://minecraft.curseforge.com/api/game/versions" -H "X-Api-Token: $CF" -o result.json
+mv result.json ../pages/
+
+# todo add modrinth curl
+
+if [ $? -ne 0 ]; then
+  echo "curl error"
+  exit 2
+fi
+
+echo "success"
