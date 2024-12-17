@@ -1,4 +1,3 @@
-import * as core from "@actions/core"
 import { ActionExtType } from "./action-extension.type";
 
 export class ActionExtension implements ActionExtType {
@@ -8,9 +7,8 @@ export class ActionExtension implements ActionExtType {
   private readonly _curseforgeUploadMetadata: string;
   private readonly _pathOfSourceToUpload: string;
   private readonly _axiosAgent: string;
-  private readonly _computedEndpoint: string;
 
-  private constructor(
+  constructor(
     curseforgeToken: string,
     curseforgeProjectId: string,
     curseforgeDomainCtx: string,
@@ -24,39 +22,7 @@ export class ActionExtension implements ActionExtType {
     this._curseforgeUploadMetadata = curseforgeUploadMetadata;
     this._pathOfSourceToUpload = pathOfSourceToUpload;
     this._axiosAgent = axiosAgent;
-    this._computedEndpoint = `https://${this.curseforgeDomainCtx}.curseforge.com/api/projects/${this.curseforgeProjectId}/upload-file`;
   }
-
-  public static fromInput(): ActionExtension {
-    return new ActionExtension(
-      core.getInput("cf-token"),
-      core.getInput("cf-projecid"),
-      core.getInput("file-path"),
-      core.getInput("cf-context"),
-      core.getInput("cf-metadata"),
-      core.getInput("axios-agent")
-    );
-  }
-
-  public static fromRaw(
-    curseforgeToken: string,
-    curseforgeProjectId: string,
-    curseforgeDomainCtx: string,
-    curseforgeUploadMetadata: string,
-    pathOfSourceToUpload: string,
-    axiosAgent: string,
-  ): ActionExtension {
-    return new ActionExtension(
-      curseforgeToken,
-      curseforgeProjectId,
-      curseforgeDomainCtx,
-      curseforgeUploadMetadata,
-      pathOfSourceToUpload,
-      axiosAgent,
-    );
-  }
-
-  public get computedEndpoint(): string { return this._computedEndpoint; }
 
   public get curseforgeToken(): string { return this._curseforgeToken }
 

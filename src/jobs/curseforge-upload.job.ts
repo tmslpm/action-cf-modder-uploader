@@ -1,9 +1,13 @@
-import { ActionExtension } from "src/extensions/action-extension";
 import axios from "axios";
 import FormData from "form-data"
 import fs from "fs";
+import { ActionExtType } from "src/extensions/action-extension.type";
 
-export async function uploadToCurseforge(ext: ActionExtension): Promise<void> {
+export function computeEndpoint(ext: ActionExtType): string {
+  return `https://${ext.curseforgeDomainCtx}.curseforge.com/api/projects/${ext.curseforgeProjectId}/upload-file`;
+}
+
+export async function uploadToCurseforge(ext: ActionExtType): Promise<void> {
 
   const formData = new FormData();
   formData.append("metadata", JSON.stringify(ext.curseforgeUploadMetadata));
@@ -17,6 +21,6 @@ export async function uploadToCurseforge(ext: ActionExtension): Promise<void> {
       ...formData.getHeaders()
     }
   };
-
-  return axios.post(ext.computedEndpoint, formData, headers);
+  const computedEndpoint = computeEndpoint(ext);
+  return axios.post(computedEndpoint, formData, headers);
 }

@@ -1,7 +1,7 @@
 import * as core from "@actions/core"
-import { ActionExtension } from "./extensions/action-extension";
 import { uploadToCurseforge } from "./jobs/curseforge-upload.job";
 import { validateExtension } from "./jobs/validate-extension.job";
+import { createExtensionFromInput } from "./extensions/action-extension.helper";
 
 /**
  * The main function for the action.
@@ -11,7 +11,7 @@ export async function run(): Promise<void> {
   try {
     // prepare ext
     core.debug("step <- prepare action extension");
-    const ext = ActionExtension.fromInput();
+    const ext = createExtensionFromInput();
 
     // validate ext
     core.debug("step <- validate action extension");
