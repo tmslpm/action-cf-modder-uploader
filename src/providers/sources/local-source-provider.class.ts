@@ -5,8 +5,8 @@ import fs from "fs";
 
 export class LocalSourceProvider extends SourceProvider {
 
-  public override fetch(ext: ActionExtType): ReadStream {
-    return fs.createReadStream(ext.pathOfSourceToUpload)
+  public override fetch(path: string): ReadStream {
+    return fs.createReadStream(path)
   }
 
 }

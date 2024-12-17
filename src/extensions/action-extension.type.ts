@@ -45,6 +45,8 @@ export type ActionExtType = {
    * During testing, I encountered issues with Cloudflare blocking 
    * requests. Adding a Axios agent allowed the requests to pass 
    * successfully.
+   * 
+   * default: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36`
    */
   readonly axiosAgent: string;
 

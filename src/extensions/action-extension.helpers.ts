@@ -4,11 +4,11 @@ import { ActionExtension } from "./action-extension.class";
 
 export function createExtensionFromInput(): ActionExtType {
   return new ActionExtension(
-    core.getInput("cf-token"),
-    core.getInput("cf-projecid"),
-    core.getInput("file-path"),
-    core.getInput("cf-context"),
-    core.getInput("cf-metadata"),
+    core.getInput("curseforge-token"),
+    core.getInput("curseforge-projec-id"),
+    core.getInput("curseforge-domain-ctx"),
+    core.getInput("curseforge-metadata"),
+    core.getInput("target-or-path-to-upload"),
     core.getInput("axios-agent")
   );
 }

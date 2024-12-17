@@ -6,7 +6,7 @@ import { GithubSourceProvider } from "./gh-source-provider.class";
 
 export abstract class SourceProvider {
 
-  public abstract fetch(ext: ActionExtType): ReadStream;
+  public abstract fetch(target: string): ReadStream;
 
   public static getProvider(provider: SourceProviderEnum): SourceProvider {
     switch (provider) {

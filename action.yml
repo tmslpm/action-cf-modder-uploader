@@ -1,6 +1,6 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Curseforge Modder Uploader'
+description: 'Action allows you to setup a resource to be uploaded to curseforge servers using the curseforge api.'
+author: 'tmslpm'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
@@ -9,15 +9,33 @@ branding:
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  curseforge-token:
+    description: 'The authentication token for CurseForge API. Used to authorize the upload request.'
     required: true
-    default: '1000'
+  
+  curseforge-project-id:
+    description: 'The unique identifier of the CurseForge project. This is used to specify which project the content is being uploaded to.'
+    required: true
+
+  curseforge-domain-ctx:
+    description: 'The domain context of CurseForge API. (`minecraft`, `sims4`)'
+    required: true
+
+  curseforge-metadata:
+    description: 'Metadata related to the content being uploaded to CurseForge.'
+  
+  target-or-path-to-upload:
+    description: 'The target or the path to the source content to be uploaded to Curseforge'
+    required: true
+      
+  axios-agent:
+    description: 'The Axios agent configuration for making the HTTP request to Curseforge API'
+    default: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
 
 # Define your outputs here.
 outputs:
   time:
-    description: 'Your output description here'
+    description: 'Response of Curseforge API'
 
 runs:
   using: node20

@@ -5,8 +5,8 @@ import fs from "fs";
 
 export class GithubSourceProvider extends SourceProvider {
 
-  public override fetch(ext: ActionExtType): ReadStream {
-    return fs.createReadStream(ext.pathOfSourceToUpload)
+  public override fetch(endpoint: string): ReadStream {
+    return fs.createReadStream(endpoint)
   }
 
 }
