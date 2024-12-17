@@ -1,7 +1,7 @@
 import * as core from "@actions/core"
 import { uploadToCurseforge } from "./jobs/curseforge-upload.job";
 import { validateExtension } from "./jobs/validate-extension.job";
-import { createExtensionFromInput } from "./extensions/action-extension.helper";
+import { createExtensionFromInput } from "./extensions/action-extension.helpers";
 
 /**
  * The main function for the action.

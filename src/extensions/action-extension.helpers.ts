@@ -2,7 +2,7 @@ import * as core from "@actions/core"
 import { ActionExtType } from "./action-extension.type";
 import { ActionExtension } from "./action-extension";
 
-export function fromInput(): ActionExtType {
+export function createExtensionFromInput(): ActionExtType {
   return new ActionExtension(
     core.getInput("cf-token"),
     core.getInput("cf-projecid"),
@@ -13,7 +13,7 @@ export function fromInput(): ActionExtType {
   );
 }
 
-export function fromRaw(
+export function createExtension(
   curseforgeToken: string,
   curseforgeProjectId: string,
   curseforgeDomainCtx: string,
