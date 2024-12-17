@@ -1,6 +1,6 @@
 import * as core from "@actions/core"
 import { ActionExtType } from "./action-extension.type";
-import { ActionExtension } from "./action-extension";
+import { ActionExtension } from "./action-extension.class";
 
 export function createExtensionFromInput(): ActionExtType {
   return new ActionExtension(
