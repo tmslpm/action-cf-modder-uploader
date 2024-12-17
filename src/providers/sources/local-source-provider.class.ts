@@ -1,12 +1,11 @@
 import { ReadStream } from "fs";
-import { ActionExtType } from "src/extensions/action-extension.type";
 import { SourceProvider } from "./source-provider.class";
 import fs from "fs";
 
 export class LocalSourceProvider extends SourceProvider {
 
   public override fetch(path: string): ReadStream {
-    return fs.createReadStream(path)
+    return fs.createReadStream(path);
   }
 
 }

@@ -1,5 +1,4 @@
 import { ReadStream } from "fs";
-import { ActionExtType } from "src/extensions/action-extension.type";
 import { LocalSourceProvider } from "./local-source-provider.class";
 import { SourceProviderEnum } from "./source-provider.enum";
 import { GithubSourceProvider } from "./gh-source-provider.class";
