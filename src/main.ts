@@ -1,7 +1,7 @@
-import * as core from '@actions/core'
-import FormData from 'form-data'
-import fs from 'fs';
-import axios from 'axios';
+import * as core from "@actions/core"
+import { ActionExtension } from "./extensions/action-extension";
+import { uploadToCurseforge } from "./jobs/curseforge-upload.job";
+import { validateExtension } from "./jobs/validate-extension.job";
 
 /**
  * The main function for the action.
@@ -9,33 +9,24 @@ import axios from 'axios';
  */
 export async function run(): Promise<void> {
   try {
-    core.debug("step <- run.prepare");
-    const API_TOKEN: string = core.getInput('cf-token');
-    const PROJECT_ID: string = core.getInput('cf-projecid');
-    const FILE_PATH: string = core.getInput('file-path');
-    const CTX: string = core.getInput("cf-context");
-    const METADATA: string = core.getInput("cf-metadata");
-    const AGENT: string = core.getInput("axios-agent");
+    // prepare ext
+    core.debug("step <- prepare action extension");
+    const ext = ActionExtension.fromInput();
 
-    core.debug("step <- run.validate");
-    if (!fs.existsSync(FILE_PATH)) {
-      core.setFailed(`not found file ${FILE_PATH}`);
-    }
+    // validate ext
+    core.debug("step <- validate action extension");
+    validateExtension(ext)
 
-    core.debug("step <- run");
-    const formData = new FormData();
-    formData.append('metadata', JSON.stringify(METADATA));
-    formData.append('file', fs.createReadStream(FILE_PATH));
-    const result = await axios.post(`https://${CTX}.curseforge.com/api/projects/${PROJECT_ID}/upload-file`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        'User-Agent': AGENT,
-        'X-Api-Token': API_TOKEN,
-        ...formData.getHeaders()
-      }
-    });
-    core.setOutput('file', result)
+    // run
+    core.debug("step <- starting curseforge upload job");
+    const result = uploadToCurseforge(ext);
+
+    core.setOutput("file", result);
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.setFailed(error.message);
+    } else {
+      core.setFailed("unknown error");
+    }
   }
 }
