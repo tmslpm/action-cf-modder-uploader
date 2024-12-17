@@ -1,5 +1,5 @@
-import * as core from '@actions/core'
-import FormData from 'form-data'
+import * as core from '@actions/core';
+import FormData from 'form-data';
 import fs from 'fs';
 import axios from 'axios';
 
