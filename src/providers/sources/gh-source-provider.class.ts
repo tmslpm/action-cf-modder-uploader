@@ -1,11 +1,13 @@
-import { ReadStream } from "fs";
 import { SourceProvider } from "./source-provider.class";
-import fs from "fs";
+import { ReadStream, createReadStream } from "fs";
 
 export class GithubSourceProvider extends SourceProvider {
+  public constructor() {
+    super();
+  }
 
   public override fetch(endpoint: string): ReadStream {
-    return fs.createReadStream(endpoint);
+    return createReadStream(endpoint);
   }
 
 }

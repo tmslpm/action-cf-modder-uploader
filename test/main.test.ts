@@ -8,9 +8,11 @@
 
 import * as core from "@actions/core";
 import * as main from "../src/main";
+import axios from "axios";
 
 // Mock the action"s main function
 const runMock = jest.spyOn(main, "run");
+jest.mock("axios");
 
 // Mock the GitHub Actions core library
 let debugMock: jest.SpiedFunction<typeof core.debug>;
@@ -38,6 +40,8 @@ describe("action", () => {
 
     setOutputMock = jest.spyOn(core, "setOutput")
       .mockImplementation();
+
+    (axios.post as jest.Mock).mockResolvedValue({ data: "mocked post response" });
   })
 
   it("sets the time output", async () => {
