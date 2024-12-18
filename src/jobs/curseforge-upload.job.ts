@@ -1,27 +1,11 @@
 import axios from "axios";
 import FormData from "form-data";
 import { ActionExtType } from "../extensions/action-extension.type";
-import { SourceProvider } from "../providers/sources/source-provider.class";
 import { SourceProviderEnum } from "../providers/sources/source-provider.enum";
-import { GithubSourceProvider } from "../providers/sources/gh-source-provider.class";
-import { LocalSourceProvider } from "../providers/sources/local-source-provider.class";
+import { getProvider } from "../providers/sources/source-provider.helper";
 
 export function computeEndpoint(ext: ActionExtType): string {
   return `https://${ext.curseforgeDomainCtx}.curseforge.com/api/projects/${ext.curseforgeProjectId}/upload-file`;
-}
-
-export function getProvider(provider: SourceProviderEnum): SourceProvider {
-  switch (provider) {
-    // from github api
-    case SourceProviderEnum.GITHUB:
-      return new GithubSourceProvider();
-
-    // from local
-    case SourceProviderEnum.LOCAL:
-      return new LocalSourceProvider();
-    default:
-      return new LocalSourceProvider();
-  }
 }
 
 export async function uploadToCurseforge(ext: ActionExtType): Promise<void> {

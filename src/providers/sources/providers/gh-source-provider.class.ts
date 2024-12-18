@@ -1,4 +1,4 @@
-import { SourceProvider } from "./source-provider.class";
+import { SourceProvider } from "../source-provider.class";
 import { ReadStream, createReadStream } from "fs";
 
 export class GithubSourceProvider extends SourceProvider {
