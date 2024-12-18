@@ -1,35 +1,38 @@
-import { createReadStream } from "fs";
-import { ReadStream } from "fs";
+import * as fs from "fs";
+import { createReadStream, existsSync } from "fs";
 import { LocalSourceProvider } from "../../../src/providers/sources/providers/local-source-provider.class";
 
-jest.mock("fs", () => ({
-  createReadStream: jest.fn()
-}));
+jest.mock("fs");
 
-describe("getProvider", () => {
-
+describe("LocalSourceProvider", () => {
   let provider: LocalSourceProvider;
+  let mockReadStream: fs.ReadStream;
 
   beforeEach(() => {
     provider = new LocalSourceProvider();
-  });
+    mockReadStream = {} as fs.ReadStream;
 
-  it("should be an instance of SourceProvider", () => {
-    expect(provider).toBeInstanceOf(LocalSourceProvider);
-  });
-
-  it("should call createReadStream when fetch is called", () => {
-    const mockReadStream = {} as ReadStream;
+    // Mock avec `jest.spyOn`
     (createReadStream as jest.Mock).mockReturnValue(mockReadStream);
-
-    const endpoint = "mockEndpoint";
-    const result = provider.fetch(endpoint);
-
-    expect(createReadStream)
-      .toHaveBeenCalledWith(endpoint);
-
-    expect(result)
-      .toBe(mockReadStream);
+    (existsSync as jest.Mock).mockImplementation(path => path === "valid/path");
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks(); // Nettoyage des mocks après chaque test
+  });
+
+  it("should throw when source non-existent", () => {
+    expect(() => {
+      provider.fetch("invalid/path");
+    }).toThrowError("File not found: invalid/path. Please check the path.");
+
+    expect(fs.createReadStream).not.toHaveBeenCalled(); // Vérifie que createReadStream n'est pas appelé
+  });
+
+  it("should call createReadStream when source exists", () => {
+    const result = provider.fetch("valid/path");
+
+    expect(fs.createReadStream).toHaveBeenCalledWith("valid/path"); // Vérifie l'appel à createReadStream
+    expect(result).toBe(mockReadStream); // Vérifie que le stream mocké est retourné
+  });
 });

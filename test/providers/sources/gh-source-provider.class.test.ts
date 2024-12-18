@@ -2,9 +2,7 @@ import { createReadStream } from "fs";
 import { ReadStream } from "fs";
 import { GithubSourceProvider } from "../../../src/providers/sources/providers/gh-source-provider.class";
 
-jest.mock("fs", () => ({
-  createReadStream: jest.fn()
-}));
+jest.mock("fs");
 
 describe("getProvider", () => {
 
@@ -12,6 +10,10 @@ describe("getProvider", () => {
 
   beforeEach(() => {
     provider = new GithubSourceProvider();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it("should be an instance of SourceProvider", () => {

@@ -9,17 +9,17 @@
 import * as core from "@actions/core";
 import * as main from "../src/main";
 import axios from "axios";
+import { LocalSourceProvider } from "../src/providers/sources/providers/local-source-provider.class";
 
-// Mock the action"s main function
 const runMock = jest.spyOn(main, "run");
 jest.mock("axios");
 
-// Mock the GitHub Actions core library
 let debugMock: jest.SpiedFunction<typeof core.debug>;
 let errorMock: jest.SpiedFunction<typeof core.error>;
 let getInputMock: jest.SpiedFunction<typeof core.getInput>;
 let setFailedMock: jest.SpiedFunction<typeof core.setFailed>;
 let setOutputMock: jest.SpiedFunction<typeof core.setOutput>;
+let mockCheckIfSourceExist: jest.SpiedFunction<typeof LocalSourceProvider.checkIfSourceExist>;
 
 describe("action", () => {
 
@@ -41,12 +41,21 @@ describe("action", () => {
     setOutputMock = jest.spyOn(core, "setOutput")
       .mockImplementation();
 
-    (axios.post as jest.Mock).mockResolvedValue({ data: "mocked post response" });
-  })
+    (axios.post as jest.Mock)
+      .mockResolvedValue({ data: "mocked post response" });
+
+    mockCheckIfSourceExist = jest.spyOn(LocalSourceProvider, "checkIfSourceExist")
+      .mockImplementation(() => { });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
 
   it("sets the time output", async () => {
     // Set the action"s inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => name === "" ? "500" : "")
+    getInputMock.mockImplementation(name => name === "" ? "500" : "");
+
 
     await main.run()
     expect(runMock).toHaveReturned()
@@ -60,7 +69,9 @@ describe("action", () => {
 
   it("sets a failed status", async () => {
     // Set the action"s inputs as return values from core.getInput()
-    getInputMock.mockImplementation(name => name === "" ? "this is not a number" : "")
+    getInputMock.mockImplementation(name => name === ""
+      ? "this is not a number" : "")
+
     await main.run();
 
     expect(runMock)
@@ -72,5 +83,6 @@ describe("action", () => {
 
     expect(errorMock)
       .not.toHaveBeenCalled();
-  })
-})
+  });
+
+});

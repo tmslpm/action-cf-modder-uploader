@@ -1,4 +1,4 @@
-import { ActionExtension } from "../../src/extensions/action-extension.class"; // Ajustez le chemin si nécessaire
+import { ActionExtension } from "../../src/extensions/action-extension.class";
 
 describe("test: action-extension", () => {
 

@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import { ActionExtension } from "../../src/extensions/action-extension.class"; // Ajustez le chemin si nécessaire
+import { ActionExtension } from "../../src/extensions/action-extension.class";
 import { createExtension, createExtensionFromInput } from "../../src/extensions/action-extension.helpers";
 import { ActionExtType } from "../../src/extensions/action-extension.type";
 

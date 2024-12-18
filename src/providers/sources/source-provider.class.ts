@@ -1,4 +1,4 @@
-import { ReadStream } from "fs";
+import * as fs from "fs";
 
 /**
  * Abstract Base Class: SourceProvider
@@ -45,7 +45,7 @@ export abstract class SourceProvider {
    * @note This method must be implemented in all concrete subclasses.
    * @see {@link LocalSourceProvider} for an example implementation.
    */
-  public abstract fetch(target: string): ReadStream;
+  public abstract fetch(target: string): fs.ReadStream;
 
 }
 
